@@ -1,0 +1,3 @@
+sqlite3:
+  dbname: limo.db
+wipe: true
