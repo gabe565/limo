@@ -45,6 +45,10 @@ func (s *Server) PutFile() http.HandlerFunc {
 			panic(err)
 		}
 
+		if err := out.Close(); err != nil {
+			panic(err)
+		}
+
 		w.WriteHeader(http.StatusCreated)
 	}
 }
