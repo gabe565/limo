@@ -14,6 +14,7 @@ func (s *Server) Handler() *chi.Mux {
 	r.Use(middleware.Recoverer)
 
 	r.Put("/{name}", s.PutFile())
+	r.Put("/", s.PutFile())
 	r.Get("/{name}", s.GetFile())
 	r.Delete("/{name}", s.DeleteFile())
 

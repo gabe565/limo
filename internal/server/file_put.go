@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/gabe565/limo/internal/models"
+	"github.com/gabe565/limo/internal/util"
 	"github.com/go-chi/chi/v5"
 	"github.com/volatiletech/sqlboiler/v4/boil"
 	. "github.com/volatiletech/sqlboiler/v4/queries/qm"
@@ -13,7 +14,16 @@ import (
 
 func (s *Server) PutFile() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		name := filepath.Join("/", chi.URLParam(r, "name"))
+		name := chi.URLParam(r, "name")
+		if name == "" {
+			rand, err := util.RandSlug(4)
+			if err != nil {
+				panic(err)
+			}
+			name = rand
+		}
+		name = filepath.Join("/", name)
+
 		if models.Files(Where("name=?", name)).ExistsP(r.Context(), s.Db) {
 			http.Error(w, "Already exists", http.StatusUnprocessableEntity)
 			return
