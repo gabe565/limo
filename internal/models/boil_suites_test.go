@@ -13,64 +13,63 @@ import "testing"
 // Separating the tests thusly grants avoidance of Postgres deadlocks.
 func TestParent(t *testing.T) {
 	t.Run("Files", testFiles)
-	t.Run("GooseDBVersions", testGooseDBVersions)
+}
+
+func TestSoftDelete(t *testing.T) {
+	t.Run("Files", testFilesSoftDelete)
+}
+
+func TestQuerySoftDeleteAll(t *testing.T) {
+	t.Run("Files", testFilesQuerySoftDeleteAll)
+}
+
+func TestSliceSoftDeleteAll(t *testing.T) {
+	t.Run("Files", testFilesSliceSoftDeleteAll)
 }
 
 func TestDelete(t *testing.T) {
 	t.Run("Files", testFilesDelete)
-	t.Run("GooseDBVersions", testGooseDBVersionsDelete)
 }
 
 func TestQueryDeleteAll(t *testing.T) {
 	t.Run("Files", testFilesQueryDeleteAll)
-	t.Run("GooseDBVersions", testGooseDBVersionsQueryDeleteAll)
 }
 
 func TestSliceDeleteAll(t *testing.T) {
 	t.Run("Files", testFilesSliceDeleteAll)
-	t.Run("GooseDBVersions", testGooseDBVersionsSliceDeleteAll)
 }
 
 func TestExists(t *testing.T) {
 	t.Run("Files", testFilesExists)
-	t.Run("GooseDBVersions", testGooseDBVersionsExists)
 }
 
 func TestFind(t *testing.T) {
 	t.Run("Files", testFilesFind)
-	t.Run("GooseDBVersions", testGooseDBVersionsFind)
 }
 
 func TestBind(t *testing.T) {
 	t.Run("Files", testFilesBind)
-	t.Run("GooseDBVersions", testGooseDBVersionsBind)
 }
 
 func TestOne(t *testing.T) {
 	t.Run("Files", testFilesOne)
-	t.Run("GooseDBVersions", testGooseDBVersionsOne)
 }
 
 func TestAll(t *testing.T) {
 	t.Run("Files", testFilesAll)
-	t.Run("GooseDBVersions", testGooseDBVersionsAll)
 }
 
 func TestCount(t *testing.T) {
 	t.Run("Files", testFilesCount)
-	t.Run("GooseDBVersions", testGooseDBVersionsCount)
 }
 
 func TestHooks(t *testing.T) {
 	t.Run("Files", testFilesHooks)
-	t.Run("GooseDBVersions", testGooseDBVersionsHooks)
 }
 
 func TestInsert(t *testing.T) {
 	t.Run("Files", testFilesInsert)
 	t.Run("Files", testFilesInsertWhitelist)
-	t.Run("GooseDBVersions", testGooseDBVersionsInsert)
-	t.Run("GooseDBVersions", testGooseDBVersionsInsertWhitelist)
 }
 
 // TestToOne tests cannot be run in parallel
@@ -115,25 +114,20 @@ func TestToManyRemove(t *testing.T) {}
 
 func TestReload(t *testing.T) {
 	t.Run("Files", testFilesReload)
-	t.Run("GooseDBVersions", testGooseDBVersionsReload)
 }
 
 func TestReloadAll(t *testing.T) {
 	t.Run("Files", testFilesReloadAll)
-	t.Run("GooseDBVersions", testGooseDBVersionsReloadAll)
 }
 
 func TestSelect(t *testing.T) {
 	t.Run("Files", testFilesSelect)
-	t.Run("GooseDBVersions", testGooseDBVersionsSelect)
 }
 
 func TestUpdate(t *testing.T) {
 	t.Run("Files", testFilesUpdate)
-	t.Run("GooseDBVersions", testGooseDBVersionsUpdate)
 }
 
 func TestSliceUpdateAll(t *testing.T) {
 	t.Run("Files", testFilesSliceUpdateAll)
-	t.Run("GooseDBVersions", testGooseDBVersionsSliceUpdateAll)
 }

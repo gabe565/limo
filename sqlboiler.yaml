@@ -1,3 +1,17 @@
 sqlite3:
-  dbname: limo.db
+  dbname: data/limo.db
+  blacklist:
+    - goose_db_version
 wipe: true
+add-soft-deletes: true
+add-panic-variants: true
+output: internal/models
+types:
+  - match:
+      tables: [file_logs]
+      name: action
+    replace:
+      type: action.Action
+    imports:
+      third_party:
+        - '"github.com/gabe565/limo/internal/action"'

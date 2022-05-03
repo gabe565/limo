@@ -4,9 +4,7 @@
 package models
 
 var TableNames = struct {
-	Files          string
-	GooseDBVersion string
+	Files string
 }{
-	Files:          "files",
-	GooseDBVersion: "goose_db_version",
+	Files: "files",
 }

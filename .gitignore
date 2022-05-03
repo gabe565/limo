@@ -1,4 +1,5 @@
-.idea
+.idea/
+data/
 limo
 limo.db
-vendor
+vendor/

@@ -6,15 +6,16 @@ import (
 	"github.com/volatiletech/sqlboiler/v4/boil"
 )
 
-const DefaultFile = "limo.db"
+const DSN = "file:data/limo.db?cache=shared"
 
 func Open() (*sql.DB, error) {
-	db, err := sql.Open("sqlite3", DefaultFile)
+	db, err := sql.Open("sqlite3", DSN)
 	if err != nil {
 		return db, err
 	}
 
 	boil.SetDB(db)
+	boil.DebugMode = true
 
 	return db, err
 }
