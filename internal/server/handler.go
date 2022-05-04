@@ -15,7 +15,7 @@ func (s *Server) Handler() *chi.Mux {
 
 	r.Route("/api/files", func(r chi.Router) {
 		r.Put("/{name}", s.PutFile())
-		r.Put("/", s.PutFile())
+		r.Post("/{name}", s.PutFile())
 		r.Get("/{name}", s.GetFile())
 		r.Delete("/{name}", s.DeleteFile())
 	})
