@@ -13,10 +13,15 @@ func (s *Server) Handler() *chi.Mux {
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	r.Put("/{name}", s.PutFile())
-	r.Put("/", s.PutFile())
-	r.Get("/{name}", s.GetFile())
-	r.Delete("/{name}", s.DeleteFile())
+	r.Route("/api/files", func(r chi.Router) {
+		r.Put("/{name}", s.PutFile())
+		r.Put("/", s.PutFile())
+		r.Get("/{name}", s.GetFile())
+		r.Delete("/{name}", s.DeleteFile())
+	})
+
+	r.Get("/raw/{name}", s.GetFile())
+	r.Get("/f/{name}", s.GetFile())
 
 	return r
 }
