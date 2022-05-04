@@ -1,0 +1,2 @@
+Limo is a self-hosted website for sharing files.
+Upload files with style.

@@ -1,5 +1,5 @@
 .idea/
-data/
-limo
-limo.db
+/data/
+/limo
+/limod
 vendor/

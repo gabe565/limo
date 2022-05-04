@@ -2,23 +2,38 @@ package main
 
 import (
 	"database/sql"
+	_ "embed"
 	"github.com/gabe565/limo/internal/database"
 	"github.com/gabe565/limo/internal/server"
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
 	"os"
 	"os/signal"
 	"syscall"
 )
 
-// Reset data dir
-//go:generate rm -rf data
-//go:generate mkdir data
-// Run Goose migrations
-//go:generate goose -dir=internal/migrations sqlite3 data/limo.db up
-// Create SQLBoiler models
-//go:generate sqlboiler sqlite3
+//go:embed description.txt
+var description string
 
-func main() {
+var Command = &cobra.Command{
+	Use:     "limod [address]",
+	Short:   "Limo server",
+	Long:    description,
+	Args:    cobra.MaximumNArgs(1),
+	PreRunE: preRun,
+	RunE:    run,
+}
+
+var address = "127.0.0.1:3000"
+
+func preRun(cmd *cobra.Command, args []string) error {
+	if len(args) > 0 {
+		address = args[0]
+	}
+	return nil
+}
+
+func run(cmd *cobra.Command, args []string) error {
 	var err error
 	if err = os.MkdirAll("data/files", 0755); err != nil {
 		log.Panic(err)
@@ -38,7 +53,7 @@ func main() {
 
 	s := server.Server{}
 	go func() {
-		if err := s.ListenAndServe("127.0.0.1:3000"); err != nil {
+		if err := s.ListenAndServe(address); err != nil {
 			log.Panic(err)
 		}
 	}()
@@ -47,4 +62,11 @@ func main() {
 	signal.Notify(sigs, os.Interrupt, syscall.SIGTERM)
 	<-sigs
 	log.Info("exiting")
+	return nil
+}
+
+func main() {
+	if err := Command.Execute(); err != nil {
+		os.Exit(1)
+	}
 }

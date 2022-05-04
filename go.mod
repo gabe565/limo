@@ -9,6 +9,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/pressly/goose/v3 v3.5.3
 	github.com/sirupsen/logrus v1.8.1
+	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.9.0
 	github.com/volatiletech/null/v8 v8.1.2
 	github.com/volatiletech/randomize v0.0.1
@@ -22,6 +23,7 @@ require (
 	github.com/gofrs/uuid v3.2.0+incompatible // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/kballard/go-shellquote v0.0.0-20180428030007-95032a82bc51 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
