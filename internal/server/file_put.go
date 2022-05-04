@@ -12,6 +12,8 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
+	"strings"
 )
 
 func (s *Server) PutFile() http.HandlerFunc {
@@ -21,9 +23,15 @@ func (s *Server) PutFile() http.HandlerFunc {
 		ExpiresAt null.Time `json:"expiresAt"`
 	}
 
+	shouldRandomize := func(r *http.Request) bool {
+		v := strings.ToLower(r.Header.Get("Random"))
+		random, err := strconv.ParseBool(v)
+		return (err == nil && random) || v == "yes"
+	}
+
 	return func(w http.ResponseWriter, r *http.Request) {
 		name := chi.URLParam(r, "name")
-		if name == "" {
+		if shouldRandomize(r) || name == "" {
 			rand, err := util.RandSlug(4)
 			if err != nil {
 				panic(err)
