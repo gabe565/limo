@@ -25,7 +25,7 @@ func (s *Server) PutFile() http.HandlerFunc {
 		name = filepath.Join("/", name)
 
 		if models.Files(Where("name=?", name)).ExistsGP(r.Context()) {
-			http.Error(w, "Already exists", http.StatusUnprocessableEntity)
+			http.Error(w, "File already exists", http.StatusUnprocessableEntity)
 			return
 		}
 
