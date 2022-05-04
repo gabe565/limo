@@ -36,7 +36,7 @@ func main() {
 		log.Panic(err)
 	}
 
-	s := server.Server{Db: db}
+	s := server.Server{}
 	go func() {
 		if err := s.ListenAndServe("127.0.0.1:3000"); err != nil {
 			log.Panic(err)

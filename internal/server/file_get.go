@@ -15,7 +15,7 @@ import (
 func (s *Server) GetFile() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		name := filepath.Join("/", chi.URLParam(r, "name"))
-		file, err := models.Files(Where("name=?", name)).One(r.Context(), s.Db)
+		file, err := models.Files(Where("name=?", name)).OneG(r.Context())
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)

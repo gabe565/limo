@@ -5,6 +5,7 @@ sqlite3:
 wipe: true
 add-soft-deletes: true
 add-panic-variants: true
+add-global-variants: true
 output: internal/models
 types:
   - match:

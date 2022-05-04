@@ -24,14 +24,14 @@ func (s *Server) PutFile() http.HandlerFunc {
 		}
 		name = filepath.Join("/", name)
 
-		if models.Files(Where("name=?", name)).ExistsP(r.Context(), s.Db) {
+		if models.Files(Where("name=?", name)).ExistsGP(r.Context()) {
 			http.Error(w, "Already exists", http.StatusUnprocessableEntity)
 			return
 		}
 
 		var file models.File
 		file.Name = name
-		file.InsertP(r.Context(), s.Db, boil.Infer())
+		file.InsertGP(r.Context(), boil.Infer())
 
 		out, err := os.Create(filepath.Join("data/files", file.Name))
 		if err != nil {

@@ -13,7 +13,7 @@ import (
 func (s *Server) DeleteFile() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		name := filepath.Join("/", chi.URLParam(r, "name"))
-		file, err := models.Files(Where("name=?", name)).One(r.Context(), s.Db)
+		file, err := models.Files(Where("name=?", name)).OneG(r.Context())
 		if err != nil {
 			if errors.Is(err, sql.ErrNoRows) {
 				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
@@ -21,7 +21,7 @@ func (s *Server) DeleteFile() http.HandlerFunc {
 			}
 			panic(err)
 		}
-		file.DeleteP(r.Context(), s.Db, false)
+		file.DeleteGP(r.Context(), false)
 
 		w.WriteHeader(http.StatusNoContent)
 	}
