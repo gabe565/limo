@@ -28,7 +28,7 @@ func (s *Server) PutFile() http.HandlerFunc {
 			if err != nil {
 				panic(err)
 			}
-			name = rand
+			name = rand + filepath.Ext(name)
 		}
 		name = filepath.Join("/", name)
 
