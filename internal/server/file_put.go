@@ -36,7 +36,7 @@ func (s *Server) PutFile() http.HandlerFunc {
 			if err != nil {
 				panic(err)
 			}
-			name = rand + filepath.Ext(name)
+			name = rand + util.SmarterExt(name)
 		}
 		name = filepath.Join("/", name)
 
