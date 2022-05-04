@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 )
 
 func (s *Server) GetFile() http.HandlerFunc {
@@ -24,11 +25,17 @@ func (s *Server) GetFile() http.HandlerFunc {
 			panic(err)
 		}
 
-		in, err := os.Open(filepath.Join("data/files", file.Name))
+		fpath := filepath.Join("data/files", file.Name)
+		info, err := os.Stat(fpath)
+		if err != nil {
+			panic(err)
+		}
+		in, err := os.Open(fpath)
 		if err != nil {
 			panic(err)
 		}
 
+		w.Header().Set("Content-Length", strconv.Itoa(int(info.Size())))
 		if _, err = io.Copy(w, in); err != nil {
 			panic(err)
 		}
