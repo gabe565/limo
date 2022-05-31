@@ -3,7 +3,9 @@ package main
 import (
 	_ "embed"
 	"encoding/json"
+	"errors"
 	"fmt"
+	"github.com/gabe565/limo/internal/completion"
 	"github.com/gabe565/limo/internal/server"
 	"github.com/spf13/cobra"
 	"net/http"
@@ -15,22 +17,31 @@ import (
 var description string
 
 var Command = &cobra.Command{
-	Use:   "limo",
+	Use:   "limo file",
 	Short: "Upload files with style",
 	Long:  description,
-	Args:  cobra.ExactArgs(1),
 	RunE:  run,
 }
 
 var conf Config
+var completionFlag string
 
 func init() {
 	Command.Flags().Var((*URLFlag)(&conf.Address), "addr", "Server address. If not given, scheme will default to https.")
 	Command.Flags().BoolVarP(&conf.Random, "random", "r", false, "Random filename")
 	Command.Flags().VarP(&conf.Output, "output", "o", "Output format (text|t|json|j)")
+	completion.CompletionFlag(Command, &completionFlag)
 }
 
 func run(cmd *cobra.Command, args []string) error {
+	if completionFlag != "" {
+		return completion.Run(cmd, completionFlag)
+	}
+
+	if len(args) != 1 {
+		return errors.New("file is required")
+	}
+
 	cmd.SilenceUsage = true
 
 	filename := args[0]
