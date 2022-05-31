@@ -16,13 +16,13 @@ import (
 	"strings"
 )
 
-func (s *Server) PutFile() http.HandlerFunc {
-	type Response struct {
-		URL       string    `json:"url"`
-		RawURL    string    `json:"raw_url"`
-		ExpiresAt null.Time `json:"expiresAt"`
-	}
+type PutFileResponse struct {
+	URL       string    `json:"url"`
+	RawURL    string    `json:"raw_url"`
+	ExpiresAt null.Time `json:"expiresAt"`
+}
 
+func (s *Server) PutFile() http.HandlerFunc {
 	shouldRandomize := func(r *http.Request) bool {
 		v := strings.ToLower(r.Header.Get("Random"))
 		random, err := strconv.ParseBool(v)
@@ -71,7 +71,7 @@ func (s *Server) PutFile() http.HandlerFunc {
 		switch r.Header.Get("Accept") {
 		case "application/json":
 			rawUrl := util.NewUrl(r, "/raw"+file.Name)
-			resp := Response{
+			resp := PutFileResponse{
 				RawURL:    rawUrl.String(),
 				URL:       publicUrl.String(),
 				ExpiresAt: file.ExpiresAt,
