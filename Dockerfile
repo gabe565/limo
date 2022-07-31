@@ -19,11 +19,13 @@ RUN --mount=type=cache,target=/root/.cache/go-build set -x \
         'linux/arm64') export GOARCH=arm64 ;; \
         *) echo "Unsupported target: $TARGETPLATFORM" && exit 1 ;; \
     esac \
+    && go build -ldflags="-w -s" ./cmd/limo \
     && go build -ldflags="-w -s" ./cmd/limod
 
 
 FROM alpine
 WORKDIR /data
+COPY --from=go-builder /go/src/app/limo /usr/local/bin
 COPY --from=go-builder /go/src/app/limod /usr/local/bin
 
 ENV LIMOD_ADDRESS :80
