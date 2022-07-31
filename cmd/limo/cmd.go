@@ -6,8 +6,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gabe565/limo/internal/completion"
+	"github.com/gabe565/limo/internal/config"
 	"github.com/gabe565/limo/internal/server"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -23,14 +25,11 @@ var Command = &cobra.Command{
 	RunE:  run,
 }
 
-var conf Config
 var completionFlag string
 
 func init() {
-	Command.Flags().Var((*URLFlag)(&conf.Address), "addr", "Server address. If not given, scheme will default to https.")
-	Command.Flags().BoolVarP(&conf.Random, "random", "r", false, "Random filename")
-	Command.Flags().VarP(&conf.Output, "output", "o", "Output format (text|t|json|j)")
-	Command.Flags().DurationVarP(&conf.ExpiresIn, "expires", "e", 0, "Set expiration time")
+	cobra.OnInitialize(config.InitViper("limo"))
+
 	completion.CompletionFlag(Command, &completionFlag)
 }
 
@@ -52,7 +51,10 @@ func run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	u := conf.Address
+	var u URLFlag
+	if err := u.Set(viper.GetString("address")); err != nil {
+		return err
+	}
 	u.Path = "/api/files/" + filepath.Base(filename)
 
 	client := &http.Client{}
@@ -62,11 +64,11 @@ func run(cmd *cobra.Command, args []string) error {
 	}
 	req.Header.Set("Accept", "application/json")
 
-	if conf.Random {
+	if viper.GetBool("random") {
 		req.Header.Set("Random", "1")
 	}
-	if conf.ExpiresIn != 0 {
-		req.Header.Set("ExpiresIn", conf.ExpiresIn.String())
+	if viper.IsSet("expires-in") {
+		req.Header.Set("ExpiresIn", viper.GetDuration("expires-in").String())
 	}
 
 	raw, err := client.Do(req)
@@ -79,7 +81,11 @@ func run(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
-	switch conf.Output {
+	var output Output
+	if err := output.Set(viper.GetString("output")); err != nil {
+		return err
+	}
+	switch output {
 	case OutputText:
 		fmt.Println(resp.URL)
 	case OutputJson:

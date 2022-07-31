@@ -25,4 +25,6 @@ RUN --mount=type=cache,target=/root/.cache/go-build set -x \
 FROM alpine
 WORKDIR /data
 COPY --from=go-builder /go/src/app/limod /usr/local/bin
+
+ENV LIMOD_ADDRESS :80
 CMD ["limod"]
