@@ -5,21 +5,19 @@ import (
 	"github.com/gabe565/limo/internal/models"
 	"github.com/gabe565/limo/internal/util"
 	"github.com/go-chi/chi/v5"
-	"github.com/volatiletech/null/v8"
-	"github.com/volatiletech/sqlboiler/v4/boil"
-	. "github.com/volatiletech/sqlboiler/v4/queries/qm"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type PutFileResponse struct {
-	URL       string    `json:"url"`
-	RawURL    string    `json:"raw_url"`
-	ExpiresAt null.Time `json:"expiresAt"`
+	URL       string     `json:"url"`
+	RawURL    string     `json:"raw_url"`
+	ExpiresAt *time.Time `json:"expiresAt"`
 }
 
 func (s *Server) PutFile() http.HandlerFunc {
@@ -40,14 +38,21 @@ func (s *Server) PutFile() http.HandlerFunc {
 		}
 		name = filepath.Join("/", name)
 
-		if models.Files(Where("name=?", name)).ExistsGP(r.Context()) {
+		var file models.File
+		if err := s.DB.Where("name=?", name).Find(&file).Error; err != nil {
+			panic(err)
+		}
+
+		if file.ID != 0 {
 			http.Error(w, "File already exists", http.StatusUnprocessableEntity)
 			return
 		}
 
-		var file models.File
 		file.Name = name
-		file.InsertGP(r.Context(), boil.Infer())
+
+		if err := s.DB.Create(&file).Error; err != nil {
+			panic(err)
+		}
 
 		out, err := os.Create(filepath.Join("data/files", file.Name))
 		if err != nil {
@@ -72,9 +77,11 @@ func (s *Server) PutFile() http.HandlerFunc {
 		case "application/json":
 			rawUrl := util.NewUrl(r, "/raw"+file.Name)
 			resp := PutFileResponse{
-				RawURL:    rawUrl.String(),
-				URL:       publicUrl.String(),
-				ExpiresAt: file.ExpiresAt,
+				RawURL: rawUrl.String(),
+				URL:    publicUrl.String(),
+			}
+			if file.ExpiresAt.Valid {
+				resp.ExpiresAt = &file.ExpiresAt.Time
 			}
 			if err = json.NewEncoder(w).Encode(resp); err != nil {
 				panic(err)

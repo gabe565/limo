@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	_ "embed"
 	"github.com/gabe565/limo/internal/completion"
 	"github.com/gabe565/limo/internal/database"
@@ -64,19 +63,18 @@ func run(cmd *cobra.Command, args []string) error {
 		log.Panic(err)
 	}
 
-	db, err := database.Open()
+	db, err := database.Open(database.NewConfig())
 	if err != nil {
 		log.Panic(err)
 	}
-	defer func(db *sql.DB) {
-		_ = db.Close()
-	}(db)
 
 	if err = database.Migrate(db); err != nil {
 		log.Panic(err)
 	}
 
-	s := server.Server{}
+	s := server.Server{
+		DB: db,
+	}
 	go func() {
 		if err := s.ListenAndServe(address); err != nil {
 			log.Panic(err)

@@ -3,8 +3,6 @@ ARG GO_VERSION=1.18
 FROM --platform=$BUILDPLATFORM golang:$GO_VERSION-alpine as go-builder
 WORKDIR /go/src/app
 
-RUN apk add --no-cache gcc g++
-
 COPY go.mod go.sum ./
 RUN go mod download
 

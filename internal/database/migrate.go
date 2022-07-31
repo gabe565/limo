@@ -1,21 +1,15 @@
 package database
 
 import (
-	"database/sql"
-	"github.com/gabe565/limo/internal/migrations"
-	"github.com/pressly/goose/v3"
+	"github.com/gabe565/limo/internal/models"
 	log "github.com/sirupsen/logrus"
+	"gorm.io/gorm"
 )
 
-func Migrate(db *sql.DB) error {
-	goose.SetBaseFS(migrations.Embed)
-	goose.SetLogger(log.WithField("package", "database"))
+func Migrate(db *gorm.DB) error {
+	log.Info("running migrations")
 
-	if err := goose.SetDialect("sqlite3"); err != nil {
-		return err
-	}
-
-	if err := goose.Up(db, "."); err != nil {
+	if err := db.AutoMigrate(&models.File{}); err != nil {
 		return err
 	}
 
