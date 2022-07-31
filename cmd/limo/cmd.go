@@ -30,6 +30,7 @@ func init() {
 	Command.Flags().Var((*URLFlag)(&conf.Address), "addr", "Server address. If not given, scheme will default to https.")
 	Command.Flags().BoolVarP(&conf.Random, "random", "r", false, "Random filename")
 	Command.Flags().VarP(&conf.Output, "output", "o", "Output format (text|t|json|j)")
+	Command.Flags().DurationVarP(&conf.ExpiresIn, "expires", "e", 0, "Set expiration time")
 	completion.CompletionFlag(Command, &completionFlag)
 }
 
@@ -63,6 +64,9 @@ func run(cmd *cobra.Command, args []string) error {
 
 	if conf.Random {
 		req.Header.Set("Random", "1")
+	}
+	if conf.ExpiresIn != 0 {
+		req.Header.Set("ExpiresIn", conf.ExpiresIn.String())
 	}
 
 	raw, err := client.Do(req)

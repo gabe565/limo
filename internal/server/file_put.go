@@ -50,6 +50,14 @@ func (s *Server) PutFile() http.HandlerFunc {
 
 		file.Name = name
 
+		if expIn := r.Header.Get("ExpiresIn"); expIn != "" {
+			d, err := time.ParseDuration(expIn)
+			if err != nil {
+				panic(err)
+			}
+			_ = file.ExpiresAt.Scan(time.Now().Add(d))
+		}
+
 		if err := s.DB.Create(&file).Error; err != nil {
 			panic(err)
 		}
