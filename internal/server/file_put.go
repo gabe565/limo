@@ -8,6 +8,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -36,7 +37,7 @@ func (s *Server) PutFile() http.HandlerFunc {
 			}
 			name = rand + util.SmarterExt(name)
 		}
-		name = filepath.Join("/", name)
+		name = filepath.Base(name)
 
 		var file models.File
 		if err := s.DB.Where("name=?", name).Find(&file).Error; err != nil {
@@ -80,10 +81,10 @@ func (s *Server) PutFile() http.HandlerFunc {
 
 		w.WriteHeader(http.StatusCreated)
 
-		publicUrl := util.NewUrl(r, "/f"+file.Name)
+		publicUrl := util.NewUrl(r, path.Join("/f", file.Name))
 		switch r.Header.Get("Accept") {
 		case "application/json":
-			rawUrl := util.NewUrl(r, "/raw"+file.Name)
+			rawUrl := util.NewUrl(r, path.Join("/raw", file.Name))
 			resp := PutFileResponse{
 				RawURL: rawUrl.String(),
 				URL:    publicUrl.String(),

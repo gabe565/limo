@@ -12,7 +12,7 @@ import (
 
 func (s *Server) GetFile() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		name := filepath.Join("/", chi.URLParam(r, "name"))
+		name := filepath.Base(chi.URLParam(r, "name"))
 		var file models.File
 		if err := s.DB.Where("name=?", name).First(&file).Error; err != nil {
 			panic(err)
