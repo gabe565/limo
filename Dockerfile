@@ -24,6 +24,7 @@ RUN --mount=type=cache,target=/root/.cache/go-build set -x \
 
 
 FROM alpine
+LABEL org.opencontainers.image.source="https://github.com/gabe565/limo"
 WORKDIR /data
 COPY --from=go-builder /go/src/app/limo /usr/local/bin
 COPY --from=go-builder /go/src/app/limod /usr/local/bin
