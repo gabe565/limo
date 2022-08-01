@@ -21,7 +21,6 @@ var Command = &cobra.Command{
 	Use:   "limod [address]",
 	Short: "Limo server",
 	Long:  description,
-	Args:  cobra.MaximumNArgs(1),
 	RunE:  run,
 }
 
