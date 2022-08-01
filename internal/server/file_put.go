@@ -8,7 +8,6 @@ import (
 	"io"
 	"net/http"
 	"os"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -81,10 +80,10 @@ func (s *Server) PutFile() http.HandlerFunc {
 
 		w.WriteHeader(http.StatusCreated)
 
-		publicUrl := util.NewUrl(r, path.Join("/f", file.Name))
+		publicUrl := util.NewUrl(r, file.PublicPath())
 		switch r.Header.Get("Accept") {
 		case "application/json":
-			rawUrl := util.NewUrl(r, path.Join("/raw", file.Name))
+			rawUrl := util.NewUrl(r, file.RawPath())
 			resp := PutFileResponse{
 				RawURL: rawUrl.String(),
 				URL:    publicUrl.String(),
