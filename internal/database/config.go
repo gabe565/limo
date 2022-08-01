@@ -2,6 +2,7 @@ package database
 
 import (
 	"github.com/spf13/viper"
+	"net/url"
 )
 
 func init() {
@@ -25,17 +26,17 @@ type Config struct {
 
 // BuildDsn builds out a Postgres DSN from the current config.
 func (client *Config) BuildDsn() (dsn string) {
-	dsn += "host=" + client.Hostname
+	dsn += "host=" + url.QueryEscape(client.Hostname)
 	if client.Username != "" {
-		dsn += " user=" + client.Username
+		dsn += " user=" + url.QueryEscape(client.Username)
 	}
 	if client.Password != "" {
-		dsn += " password=" + client.Password
+		dsn += " password=" + url.QueryEscape(client.Password)
 	}
 	if client.Database != "" {
-		dsn += " dbname=" + client.Database
+		dsn += " dbname=" + url.QueryEscape(client.Database)
 	}
-	dsn += " port=" + client.Port
+	dsn += " port=" + url.QueryEscape(client.Port)
 	return dsn
 }
 
