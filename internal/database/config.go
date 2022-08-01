@@ -11,6 +11,8 @@ func init() {
 	viper.SetDefault("db.username", "limo")
 	viper.SetDefault("db.password", "limo")
 	viper.SetDefault("db.database", "limo")
+	viper.SetDefault("db.maxIdle", 2)
+	viper.SetDefault("db.maxOpen", 80)
 }
 
 type Config struct {
@@ -48,7 +50,7 @@ func NewConfig() Config {
 		Username:     viper.GetString("db.username"),
 		Password:     viper.GetString("db.password"),
 		Database:     viper.GetString("db.database"),
-		MaxIdleConns: viper.GetInt("db.max-idle"),
-		MaxOpenConns: viper.GetInt("db.max-open"),
+		MaxIdleConns: viper.GetInt("db.maxIdle"),
+		MaxOpenConns: viper.GetInt("db.maxOpen"),
 	}
 }

@@ -14,5 +14,12 @@ func Open(config Config) (*gorm.DB, error) {
 		return db, err
 	}
 
+	sqlDB, err := db.DB()
+	if err != nil {
+		return db, err
+	}
+	sqlDB.SetMaxIdleConns(config.MaxIdleConns)
+	sqlDB.SetMaxOpenConns(config.MaxOpenConns)
+
 	return db, err
 }
