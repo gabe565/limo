@@ -1,8 +1,10 @@
 package server
 
 import (
+	"errors"
 	"github.com/gabe565/limo/internal/models"
 	"github.com/go-chi/chi/v5"
+	"gorm.io/gorm"
 	"io"
 	"net/http"
 	"os"
@@ -15,6 +17,10 @@ func (s *Server) GetFile() http.HandlerFunc {
 		name := filepath.Base(chi.URLParam(r, "name"))
 		var file models.File
 		if err := s.DB.Where("name=?", name).First(&file).Error; err != nil {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+				return
+			}
 			panic(err)
 		}
 
