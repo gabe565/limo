@@ -29,5 +29,7 @@ WORKDIR /data
 COPY --from=go-builder /go/src/app/limo /usr/local/bin
 COPY --from=go-builder /go/src/app/limod /usr/local/bin
 
+VOLUME /data
+
 ENV LIMOD_ADDRESS :80
 CMD ["limod"]
