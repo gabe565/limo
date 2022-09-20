@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gabe565/limo/internal/models"
 	"github.com/go-chi/chi/v5"
+	"github.com/spf13/viper"
 	"gorm.io/gorm"
 	"io"
 	"net/http"
@@ -24,7 +25,7 @@ func (s *Server) GetFile() http.HandlerFunc {
 			panic(err)
 		}
 
-		fpath := filepath.Join("data/files", file.Name)
+		fpath := filepath.Join(filepath.Join(viper.GetString("data-dir"), "files"), file.Name)
 		info, err := os.Stat(fpath)
 		if err != nil {
 			panic(err)

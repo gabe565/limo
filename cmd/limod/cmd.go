@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"os/signal"
+	"path/filepath"
 	"syscall"
 )
 
@@ -39,7 +40,7 @@ func run(cmd *cobra.Command, args []string) error {
 	cmd.SilenceUsage = true
 
 	var err error
-	if err = os.MkdirAll("data/files", 0755); err != nil {
+	if err = os.MkdirAll(filepath.Join(viper.GetString("data-dir"), "files"), 0755); err != nil {
 		log.Panic(err)
 	}
 

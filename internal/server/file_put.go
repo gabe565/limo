@@ -5,6 +5,7 @@ import (
 	"github.com/gabe565/limo/internal/models"
 	"github.com/gabe565/limo/internal/util"
 	"github.com/go-chi/chi/v5"
+	"github.com/spf13/viper"
 	"io"
 	"net/http"
 	"os"
@@ -62,7 +63,7 @@ func (s *Server) PutFile() http.HandlerFunc {
 			panic(err)
 		}
 
-		out, err := os.Create(filepath.Join("data/files", file.Name))
+		out, err := os.Create(filepath.Join(viper.GetString("data-dir"), "files", file.Name))
 		if err != nil {
 			panic(err)
 		}
