@@ -1,6 +1,19 @@
 version: "3.9"
 
 services:
+  app:
+    image: "ghcr.io/gabe565/limo"
+    build: .
+    environment:
+      LIMOD_DB_HOST: database
+      LIMOD_DB_USERNAME: limo
+      LIMOD_DB_PASSWORD: limo
+      LIMOD_DB_DATABASE: limo
+    ports:
+      - "80:80"
+    volumes:
+      - "./data:/data"
+
   database:
     image: postgres:14-alpine
     environment:
