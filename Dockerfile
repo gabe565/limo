@@ -29,6 +29,13 @@ WORKDIR /data
 COPY --from=go-builder /go/src/app/limo /usr/local/bin
 COPY --from=go-builder /go/src/app/limod /usr/local/bin
 
+ARG USERNAME=limo
+ARG UID=1000
+ARG GID=$UID
+RUN addgroup -g "$GID" "$USERNAME" \
+    && adduser -S -u "$UID" -G "$USERNAME" "$USERNAME"
+USER $USERNAME
+
 VOLUME /data
 
 ENV LIMOD_ADDRESS :80
