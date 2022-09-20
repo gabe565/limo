@@ -34,7 +34,7 @@ ARG UID=1000
 ARG GID=$UID
 RUN addgroup -g "$GID" "$USERNAME" \
     && adduser -S -u "$UID" -G "$USERNAME" "$USERNAME"
-USER $USERNAME
+USER $UID
 
 VOLUME /data
 
