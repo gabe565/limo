@@ -42,15 +42,18 @@ func run(cmd *cobra.Command, args []string) error {
 	var err error
 	if err = os.MkdirAll(filepath.Join(viper.GetString("data-dir"), "files"), 0755); err != nil {
 		log.Panic(err)
+		return err
 	}
 
 	db, err := database.Open(database.NewConfig())
 	if err != nil {
 		log.Panic(err)
+		return err
 	}
 
 	if err = database.Migrate(db); err != nil {
 		log.Panic(err)
+		return err
 	}
 
 	s := server.Server{
