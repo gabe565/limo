@@ -6,7 +6,7 @@ require (
 	github.com/go-chi/chi/v5 v5.0.7
 	github.com/onrik/gorm-logrus v0.4.0
 	github.com/sirupsen/logrus v1.9.0
-	github.com/spf13/cobra v1.6.0
+	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.13.0
 	gorm.io/driver/postgres v1.4.4
 	gorm.io/gorm v1.24.0
