@@ -2,9 +2,6 @@ name: Build
 
 on: push
 
-env:
-  go_version: "1.18"
-
 jobs:
   backend-lint:
     name: Backend Lint
@@ -15,7 +12,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ^${{ env.go_version }}
+          go-version-file: go.mod
       - run: sudo apt-get install -y libmp3lame-dev
       - name: Lint
         uses: golangci/golangci-lint-action@v3
@@ -33,7 +30,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: ^${{ env.go_version }}
+          go-version-file: go.mod
       - run: sudo apt-get install -y libmp3lame-dev
       - uses: actions/cache@v3
         with:
