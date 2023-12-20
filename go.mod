@@ -3,7 +3,7 @@ module github.com/gabe565/limo
 go 1.20
 
 require (
-	github.com/go-chi/chi/v5 v5.0.8
+	github.com/go-chi/chi/v5 v5.0.11
 	github.com/onrik/gorm-logrus v0.5.0
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.6.1
